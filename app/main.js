@@ -22,3 +22,18 @@ let createWindow = (exports.createWindow = () => {
       nodeIntegration: true
     }
   });
+  newWindow.loadFile(path.join(__dirname, 'client/index.html'));
+
+  newWindow.once('ready-to-show', () => {
+    newWindow.show();
+    newWindow.webContents.openDevTools();
+  });
+
+  newWindow.on('closed', () => {
+    windows.delete(newWindow);
+    newWindow = null;
+  });
+
+  windows.add(newWindow);
+  return newWindow;
+});
