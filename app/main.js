@@ -37,3 +37,18 @@ let createWindow = (exports.createWindow = () => {
   windows.add(newWindow);
   return newWindow;
 });
+
+app.on('ready', () => {
+  createWindow();
+});
+
+app.on('activate', (evt, hasVisibleWinow) => {
+  if (!hasVisibleWinow) createWindow();
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform === 'darwin') {
+    return false;
+  }
+  app.quit();
+});
