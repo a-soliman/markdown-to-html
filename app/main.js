@@ -52,3 +52,17 @@ app.on('window-all-closed', () => {
   }
   app.quit();
 });
+
+const getFileFromUser = (exports.getFileFromUser = targetWindow => {
+  const files = dialog.showOpenDialog(targetWindow, {
+    properties: ['openFile'],
+    filters: [
+      { name: 'Text Files', extensions: ['txt'] },
+      { name: 'Markdown Files', extensions: ['md', 'markdown'] }
+    ]
+  });
+
+  if (files) {
+    openFile(targetWindow, files[0]);
+  }
+});
