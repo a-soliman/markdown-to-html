@@ -66,3 +66,8 @@ const getFileFromUser = (exports.getFileFromUser = targetWindow => {
     openFile(targetWindow, files[0]);
   }
 });
+
+const openFile = (exports.openFile = (targetWindow, file) => {
+  const content = fs.readFileSync(file).toString();
+  targetWindow.webContents.send('file-opened', file, content);
+});
