@@ -22,6 +22,7 @@ let createWindow = (exports.createWindow = () => {
       nodeIntegration: true
     }
   });
+
   newWindow.loadFile(path.join(__dirname, 'client/index.html'));
 
   newWindow.once('ready-to-show', () => {
