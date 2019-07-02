@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./styles.css" type="text/css">
+    <title>Fire Sale</title>
+</head>
+<body>
+    <section class="controls">
+        <button id="new_file">New File</button>
+        <button id="open_file">Open File</button>
+        <button id="save_markdown" disabled>Save File</button>
+        <button id="revert" disabled>Revert</button>
+        <button id="save_html">Save HTML</button>
+        <button id="show_file" disabled>Show File</button>
+        <button id="open_in_default">Open in Default Application</button>
+    </section>
+
+    <section class="content">
+        <label for="markdown"></label>
+        <textarea name="" id="markdown" cols="30" rows="10" class="raw-markdown"></textarea>
+        <div class="renderd-html" id="html"></div>
+    </section>
+
+    <script>
+        require('./js/renderer.js')
+    </script>
+</body>
+</html>
