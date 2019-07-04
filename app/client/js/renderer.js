@@ -14,19 +14,19 @@ class App {
     this.init();
   }
 
-  init = () => {
+  init() {
     this.initEventListeners();
     this.initIpcRendererListeners();
-  };
+  }
 
-  initEventListeners = () => {
+  initEventListeners() {
     const selectors = this.ui.selectors;
     selectors.markdownView.addEventListener('keyup', this.renderHtml);
     selectors.openFileBtn.addEventListener('click', this.getFileFromUser);
     selectors.newFileBtn.addEventListener('click', this.launchNewWindow);
-  };
+  }
 
-  initIpcRendererListeners = () => {
+  initIpcRendererListeners() {
     this.ipcRenderer.on('file-opened', (evt, file, content) => {
       this.filePath = file;
       this.originalContent = content;
@@ -35,26 +35,26 @@ class App {
       this.renderHtml();
       this.updateUserInterface();
     });
-  };
+  }
 
   markdownToHtml = markdown => {
     return marked(markdown, { senitize: true });
   };
 
-  renderHtml = () => {
+  renderHtml() {
     const markdown = this.ui.markdown;
     const html = this.markdownToHtml(markdown);
     return this.ui.renderHtml(html);
-  };
+  }
 
-  getFileFromUser = () => {
+  getFileFromUser() {
     const currentWindow = remote.getCurrentWindow();
     mainProcess.getFileFromUser(currentWindow);
-  };
+  }
 
-  launchNewWindow = () => {
+  launchNewWindow() {
     return mainProcess.createWindow();
-  };
+  }
 
   updateUserInterface() {
     const title = this.filePath
