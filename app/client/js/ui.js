@@ -4,7 +4,7 @@ class UI {
       controlsSection: document.querySelector('.controls'),
       openFileBtn: document.querySelector('#open_file'),
       newFileBtn: document.querySelector('#new_file'),
-      saveMarkdownBtn: document.querySelector('#save_markdown'),
+      saveFileBtn: document.querySelector('#save_markdown'),
       revertBtn: document.querySelector('#revert'),
       saveHTMLBtn: document.querySelector('#save_html'),
       showFileBtn: document.querySelector('#show_file'),

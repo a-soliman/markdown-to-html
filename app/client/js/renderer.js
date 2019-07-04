@@ -73,6 +73,8 @@ class App {
     if (this.edited) title = `${title} (Edited)`;
 
     this.setTitle(title);
+    this.ui.selectors.revertBtn.disabled = !this.edited;
+    this.ui.selectors.saveFileBtn.disabled = !this.edited;
   }
 
   setTitle = title => remote.getCurrentWindow().setTitle(title);
