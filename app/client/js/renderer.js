@@ -72,13 +72,10 @@ class App {
     if (this.filePath) title = `${path.basename(this.filePath)} - ${title}`;
     if (this.edited) title = `${title} (Edited)`;
 
-    const currentWindow = remote.getCurrentWindow();
-    currentWindow.setTitle(title);
+    this.setTitle(title);
   }
 
-  setTitle = title => {
-    remote.getCurrentWindow().setTitle(title);
-  };
+  setTitle = title => remote.getCurrentWindow().setTitle(title);
 }
 
 const app = new App(ui, ipcRenderer);
