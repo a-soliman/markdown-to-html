@@ -25,6 +25,7 @@ class App {
     selectors.markdownView.addEventListener('keyup', this.handleMarkdownChange);
     selectors.openFileBtn.addEventListener('click', this.getFileFromUser);
     selectors.newFileBtn.addEventListener('click', this.launchNewWindow);
+    selectors.saveFileBtn.addEventListener('click', this.handleSaveMarkdown);
     selectors.saveHTMLBtn.addEventListener('click', this.handleSaveHtml);
   };
 
@@ -38,6 +39,17 @@ class App {
       this.updateUserInterface();
     });
   }
+
+  handleSaveMarkdown = () => {
+    const currentWindow = remote.getCurrentWindow();
+    const markdown = this.ui.markdown;
+    const file = this.filePath;
+    mainProcess.saveMarkdown(currentWindow, file, markdown);
+
+    this.originalContent = markdown;
+    this.edited = false;
+    this.updateUserInterface();
+  };
 
   handleSaveHtml = () => {
     const currentWindow = remote.getCurrentWindow();

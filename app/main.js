@@ -101,3 +101,15 @@ const saveHtml = (exports.saveHtml = (targetWindow, content) => {
     file = `${file}.html`;
   fs.writeFileSync(file, content);
 });
+
+const saveMarkdown = (exports.saveMarkdown = (targetWindow, file, content) => {
+  if (!file) {
+    file = dialog.showSaveDialog(targetWindow, {
+      title: 'Save Markdown',
+      defaultPath: app.getPath('documents'),
+      filters: [{ name: 'Markdown Files', extensions: ['md', 'txt'] }]
+    });
+  }
+  if (!file) return;
+  fs.writeFileSync(file, content);
+});
