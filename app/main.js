@@ -84,3 +84,20 @@ const openFile = (exports.openFile = (targetWindow, file) => {
   targetWindow.setRepresentedFilename(file);
   targetWindow.webContents.send('file-opened', file, content);
 });
+
+const saveHtml = (exports.saveHtml = (targetWindow, content) => {
+  let file = dialog.showSaveDialog(targetWindow, {
+    title: 'Save HTML',
+    defaultPath: app.getPath('documents'),
+    filters: [{ name: 'HTML Files', extensions: ['html', 'htm'] }]
+  });
+
+  if (!file) return;
+  if (
+    !path.extname(file) ||
+    path.extname !== '.html' ||
+    path.extname !== '.htm'
+  )
+    file = `${file}.html`;
+  fs.writeFileSync(file, content);
+});

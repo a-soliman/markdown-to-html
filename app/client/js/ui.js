@@ -23,6 +23,10 @@ class UI {
     this.selectors.markdownView.value = val;
   }
 
+  get html() {
+    return this.selectors.htmlView.innerHTML;
+  }
+
   renderHtml = html => {
     this.selectors.htmlView.innerHTML = html;
   };

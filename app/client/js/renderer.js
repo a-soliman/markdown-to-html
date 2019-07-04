@@ -25,6 +25,7 @@ class App {
     selectors.markdownView.addEventListener('keyup', this.handleMarkdownChange);
     selectors.openFileBtn.addEventListener('click', this.getFileFromUser);
     selectors.newFileBtn.addEventListener('click', this.launchNewWindow);
+    selectors.saveHTMLBtn.addEventListener('click', this.handleSaveHtml);
   };
 
   initIpcRendererListeners() {
@@ -37,6 +38,12 @@ class App {
       this.updateUserInterface();
     });
   }
+
+  handleSaveHtml = () => {
+    const currentWindow = remote.getCurrentWindow();
+    const html = this.ui.html;
+    mainProcess.saveHtml(currentWindow, html);
+  };
 
   handleMarkdownChange = evt => {
     const edited = this.ui.markdown !== this.originalContent;
@@ -75,6 +82,7 @@ class App {
     this.setTitle(title);
     this.ui.selectors.revertBtn.disabled = !this.edited;
     this.ui.selectors.saveFileBtn.disabled = !this.edited;
+    this.ui.selectors.saveHTMLBtn.disabled = this.ui.html.length;
   }
 
   setTitle = title => remote.getCurrentWindow().setTitle(title);
