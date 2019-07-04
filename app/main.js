@@ -54,6 +54,7 @@ app.on('window-all-closed', () => {
   app.quit();
 });
 
+// eslint-disable-next-line no-unused-vars
 const getFileFromUser = (exports.getFileFromUser = targetWindow => {
   const files = dialog.showOpenDialog(targetWindow, {
     properties: ['openFile'],
