@@ -1,4 +1,5 @@
 const { remote, ipcRenderer } = require('electron');
+const path = require('path');
 const mainProcess = remote.require('./main');
 const marked = require('marked');
 const ui = require('./ui');
@@ -7,6 +8,9 @@ class App {
   constructor(ui, ipcRenderer) {
     this.ui = ui;
     this.ipcRenderer = ipcRenderer;
+    this.filePath = null;
+    this.originalContent = '';
+
     this.init();
   }
 
@@ -24,8 +28,12 @@ class App {
 
   initIpcRendererListeners = () => {
     this.ipcRenderer.on('file-opened', (evt, file, content) => {
+      this.filePath = file;
+      this.originalContent = content;
+
       this.ui.markdown = content;
       this.renderHtml();
+      this.updateUserInterface();
     });
   };
 
@@ -47,6 +55,14 @@ class App {
   launchNewWindow = () => {
     return mainProcess.createWindow();
   };
+
+  updateUserInterface() {
+    const title = this.filePath
+      ? `${path.basename(this.filePath)} - Fire Sale`
+      : 'Fire Sale';
+    const currentWindow = remote.getCurrentWindow();
+    currentWindow.setTitle(title);
+  }
 }
 
 const app = new App(ui, ipcRenderer);
