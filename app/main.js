@@ -47,6 +47,15 @@ app.on('activate', (evt, hasVisibleWinow) => {
   if (!hasVisibleWinow) createWindow();
 });
 
+app.on('will-finish-lanching', () => {
+  app.on('open-file', (evt, file) => {
+    const win = createWindow();
+    win.once('ready-to-show', () => {
+      openFile(win, file);
+    });
+  });
+});
+
 app.on('window-all-closed', () => {
   if (process.platform === 'darwin') {
     return false;
