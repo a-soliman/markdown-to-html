@@ -71,6 +71,7 @@ const getFileFromUser = (exports.getFileFromUser = targetWindow => {
 
 const openFile = (exports.openFile = (targetWindow, file) => {
   const content = fs.readFileSync(file).toString();
+  app.addRecentDocument(file);
   targetWindow.setRepresentedFilename(file);
   targetWindow.webContents.send('file-opened', file, content);
 });
