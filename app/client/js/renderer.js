@@ -47,7 +47,40 @@ class App {
   };
 
   initIpcRendererListeners() {
+    const currentWindow = remote.getCurrentWindow();
+
     this.ipcRenderer.on('file-opened', (evt, file, content) => {
+      if (currentWindow.isDocumentEdited()) {
+        const result = remote.dialog.showMessageBox(currentWindow, {
+          type: 'warning',
+          title: 'Overwrite Current Unsaved Changes?',
+          message:
+            'Opening a new file in this window will overwrite your unsaved changes, Open file anyway?',
+          buttons: ['Yes', 'Cancel'],
+          defaultId: 0,
+          cancelId: 1
+        });
+
+        if (result === 1) return;
+      }
+      this.filePath = file;
+      this.originalContent = content;
+
+      this.ui.markdown = content;
+      this.renderHtml();
+      this.updateUserInterface();
+    });
+
+    this.ipcRenderer.on('file-changed', (evt, file, content) => {
+      const result = remote.dialog.showMessageBox(currentWindow, {
+        type: 'warning',
+        title: 'Overwrite Current Unsaved Changes?',
+        message: 'Another application has changed this file, Load changes?',
+        buttons: ['Yes', 'Cancel'],
+        defaultId: 0,
+        cancelId: 1
+      });
+
       this.filePath = file;
       this.originalContent = content;
 

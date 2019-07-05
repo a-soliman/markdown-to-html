@@ -31,6 +31,24 @@ let createWindow = (exports.createWindow = () => {
     newWindow.webContents.openDevTools();
   });
 
+  newWindow.on('close', evt => {
+    // TODO:: isDocumentEdited() is a mac only method, find an alt for win and linux.
+    if (newWindow.isDocumentEdited()) {
+      evt.preventDefault();
+
+      const result = dialog.showMessageBox(newWindow, {
+        type: 'warning',
+        title: 'Quit with Unsaved Changes',
+        message: 'Your changes will be lost if you do not save.',
+        buttons: ['Quit Anyway', 'Cancel'],
+        defaultId: 0,
+        cancelId: 1
+      });
+
+      if (result === 0) newWindow.destroy();
+    }
+  });
+
   newWindow.on('closed', () => {
     windows.delete(newWindow);
     stopWatchingFile(newWindow);
@@ -92,8 +110,8 @@ const startWatchingFile = (targetWindow, file) => {
 
   const watcher = fs.watchFile(file, evt => {
     if (evt === 'change') {
-      const content = fs.readFileSync(file);
-      targetWindow.send('file-opened', file, content);
+      const content = fs.readFileSync(file).toString();
+      targetWindow.webContents.send('file-changed', file, content);
     }
   });
 
