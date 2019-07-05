@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const windows = new Set();
+const openFiles = new Map();
 
 let createWindow = (exports.createWindow = () => {
   let x, y;
@@ -32,6 +33,7 @@ let createWindow = (exports.createWindow = () => {
 
   newWindow.on('closed', () => {
     windows.delete(newWindow);
+    stopWatchingFile(newWindow);
     newWindow = null;
   });
 
@@ -84,6 +86,26 @@ const openFile = (exports.openFile = (targetWindow, file) => {
   targetWindow.setRepresentedFilename(file);
   targetWindow.webContents.send('file-opened', file, content);
 });
+
+const startWatchingFile = (targetWindow, file) => {
+  stopWatchingFile(targetWindow);
+
+  const watcher = fs.watchFile(file, evt => {
+    if (evt === 'change') {
+      const content = fs.readFileSync(file);
+      targetWindow.send('file-opened', file, content);
+    }
+  });
+
+  openFiles.set(targetWindow, watcher);
+};
+
+const stopWatchingFile = targetWindow => {
+  if (openFiles.has(targetWindow)) {
+    openFiles.get(targetWindow).stop();
+    openFiles.delete(targetWindow);
+  }
+};
 
 const saveHtml = (exports.saveHtml = (targetWindow, content) => {
   let file = dialog.showSaveDialog(targetWindow, {
