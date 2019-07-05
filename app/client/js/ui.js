@@ -27,9 +27,9 @@ class UI {
     return this.selectors.htmlView.innerHTML;
   }
 
-  renderHtml = html => {
-    this.selectors.htmlView.innerHTML = html;
-  };
+  set html(val) {
+    this.selectors.htmlView.innerHTML = val;
+  }
 }
 
 const ui = new UI();

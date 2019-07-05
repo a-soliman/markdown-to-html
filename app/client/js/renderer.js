@@ -27,6 +27,7 @@ class App {
     selectors.newFileBtn.addEventListener('click', this.launchNewWindow);
     selectors.saveFileBtn.addEventListener('click', this.handleSaveMarkdown);
     selectors.saveHTMLBtn.addEventListener('click', this.handleSaveHtml);
+    selectors.revertBtn.addEventListener('click', this.handleRevert);
   };
 
   initIpcRendererListeners() {
@@ -57,14 +58,20 @@ class App {
     mainProcess.saveHtml(currentWindow, html);
   };
 
+  handleRevert = () => {
+    this.ui.markdown = this.originalContent;
+    this.edited = false;
+    this.renderHtml();
+    this.updateUserInterface();
+  };
+
   handleMarkdownChange = evt => {
     const edited = this.ui.markdown !== this.originalContent;
+    this.renderHtml();
     if (edited !== this.edited) {
       this.edited = edited;
       this.updateUserInterface();
     }
-
-    this.renderHtml();
   };
 
   markdownToHtml(markdown) {
@@ -74,7 +81,7 @@ class App {
   renderHtml() {
     const markdown = this.ui.markdown;
     const html = this.markdownToHtml(markdown);
-    return this.ui.renderHtml(html);
+    return (this.ui.html = html);
   }
 
   getFileFromUser() {
@@ -94,7 +101,7 @@ class App {
     this.setTitle(title);
     this.ui.selectors.revertBtn.disabled = !this.edited;
     this.ui.selectors.saveFileBtn.disabled = !this.edited;
-    this.ui.selectors.saveHTMLBtn.disabled = this.ui.html.length;
+    this.ui.selectors.saveHTMLBtn.disabled = !this.ui.html.length;
   }
 
   setTitle = title => remote.getCurrentWindow().setTitle(title);
