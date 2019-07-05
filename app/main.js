@@ -111,5 +111,8 @@ const saveMarkdown = (exports.saveMarkdown = (targetWindow, file, content) => {
     });
   }
   if (!file) return;
+  if (!path.extname(file) || path.extname !== '.txt' || path.extname !== '.md')
+    file = `${file}.txt`;
+
   fs.writeFileSync(file, content);
 });

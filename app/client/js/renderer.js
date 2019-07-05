@@ -21,13 +21,29 @@ class App {
   }
 
   initEventListeners = () => {
-    const selectors = this.ui.selectors;
-    selectors.markdownView.addEventListener('keyup', this.handleMarkdownChange);
-    selectors.openFileBtn.addEventListener('click', this.getFileFromUser);
-    selectors.newFileBtn.addEventListener('click', this.launchNewWindow);
-    selectors.saveFileBtn.addEventListener('click', this.handleSaveMarkdown);
-    selectors.saveHTMLBtn.addEventListener('click', this.handleSaveHtml);
-    selectors.revertBtn.addEventListener('click', this.handleRevert);
+    const {
+      markdownView,
+      openFileBtn,
+      newFileBtn,
+      saveFileBtn,
+      saveHTMLBtn,
+      revertBtn
+    } = this.ui.selectors;
+
+    document.addEventListener('dragstart', evt => evt.preventDefault());
+    document.addEventListener('dragover', evt => evt.preventDefault());
+    document.addEventListener('dragleave', evt => evt.preventDefault());
+    document.addEventListener('drop', evt => evt.preventDefault());
+
+    markdownView.addEventListener('dragover', this.handleOnMarkdownDragover);
+    markdownView.addEventListener('dragleave', this.handleOnMarkdownDragLeave);
+    markdownView.addEventListener('drop', this.handleOnMarkdownDrop);
+    markdownView.addEventListener('keyup', this.handleMarkdownChange);
+    openFileBtn.addEventListener('click', this.getFileFromUser);
+    newFileBtn.addEventListener('click', this.launchNewWindow);
+    saveFileBtn.addEventListener('click', this.handleSaveMarkdown);
+    saveHTMLBtn.addEventListener('click', this.handleSaveHtml);
+    revertBtn.addEventListener('click', this.handleRevert);
   };
 
   initIpcRendererListeners() {
@@ -40,6 +56,42 @@ class App {
       this.updateUserInterface();
     });
   }
+
+  getDraggedFile = evt => evt.dataTransfer.items[0];
+
+  getDroppedFile = evt => evt.dataTransfer.files[0];
+
+  fileTypeIsSupported = file => {
+    return ['text/plain', 'text/markdown'].includes(file.type);
+  };
+
+  handleOnMarkdownDragover = evt => {
+    const file = this.getDraggedFile(evt);
+    const { markdownView } = this.ui.selectors;
+    if (this.fileTypeIsSupported(file)) markdownView.classList.add('drag-over');
+    else markdownView.classList.add('drag-error');
+  };
+
+  handleOnMarkdownDragLeave = evt => {
+    const { markdownView } = this.ui.selectors;
+    markdownView.classList.remove('drag-over');
+    markdownView.classList.remove('drag-error');
+  };
+
+  handleOnMarkdownDrop = evt => {
+    const file = this.getDroppedFile(evt);
+    const currentWindow = remote.getCurrentWindow();
+    debugger;
+    const { markdownView } = this.ui.selectors;
+
+    if (this.fileTypeIsSupported(file)) {
+      console.log(file);
+      mainProcess.openFile(currentWindow, file.path);
+    } else alert('That file type is not supported.');
+
+    markdownView.classList.remove('drage-over');
+    markdownView.classList.remove('drag-error');
+  };
 
   handleSaveMarkdown = () => {
     const currentWindow = remote.getCurrentWindow();
