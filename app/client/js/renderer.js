@@ -193,3 +193,4 @@ class App {
 }
 
 const app = new App(ui, ipcRenderer);
+
