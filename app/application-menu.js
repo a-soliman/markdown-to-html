@@ -55,6 +55,47 @@ const template = [
   }
 ];
 
-if ( process.platform === 'darwin' ) template.unshift({ label: 'Fire Sale' });
+if ( process.platform === 'darwin' ) {
+  const name = 'Fire Sale';
+
+  template.unshift({
+    label: name,
+    submenu: [
+      {
+        label: `About ${name}`,
+        role: 'about'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Services',
+        role: 'services',
+        submenu: []
+      },
+      { type: 'separator'},
+      {
+        label: `Hide ${name}`,
+        accelerator: 'Command+H',
+        role: 'hide'
+      },
+      {
+        label: 'Hide Others',
+        accelerator: 'Command+Alt+H',
+        role: 'hideothers'
+      },
+      {
+        label: 'Show All',
+        role: 'unhide'
+      },
+      { type: 'separator' },
+      {
+        label: `Quit ${name}`,
+        accelerator: 'Command+Q',
+        click() { app.quit(); }
+      }
+    ]
+  });
+}
 
 module.exports = Menu.buildFromTemplate(template);
