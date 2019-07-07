@@ -1,6 +1,8 @@
-const { app, BrowserWindow, dialog } = require('electron');
+const { app, BrowserWindow, Menu, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+
+const applicationMenu = require('./application-menu');
 
 const windows = new Set();
 const openFiles = new Map();
@@ -60,6 +62,7 @@ let createWindow = (exports.createWindow = () => {
 });
 
 app.on('ready', () => {
+  Menu.setApplicationMenu(applicationMenu);
   createWindow();
 });
 
