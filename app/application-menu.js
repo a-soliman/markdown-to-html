@@ -37,6 +37,21 @@ const template = [
         role: 'selectall'
       }
     ]
+  },
+  {
+    label: 'Window',
+    submenu: [
+      {
+        label: 'Minimize',
+        accelerator: 'CommandOrControl+M',
+        role: 'minimize'
+      },
+      {
+        label: 'Close',
+        accelerator: 'CommandOrControl+W',
+        role: 'close'
+      }
+    ]
   }
 ];
 
