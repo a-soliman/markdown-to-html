@@ -88,6 +88,10 @@ class App {
       this.renderHtml();
       this.updateUserInterface();
     });
+
+    this.ipcRenderer.on('save-markdown', this.handleSaveMarkdown);
+
+    this.ipcRenderer.on('save-html', this.handleSaveHtml);
   }
 
   getDraggedFile = evt => evt.dataTransfer.items[0];
