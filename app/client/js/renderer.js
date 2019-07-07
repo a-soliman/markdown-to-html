@@ -1,7 +1,9 @@
 const { remote, ipcRenderer } = require('electron');
 const path = require('path');
-const mainProcess = remote.require('./main');
 const marked = require('marked');
+const mainProcess = remote.require('./main');
+const { Menu } = remote;
+const currentWindow = remote.getCurrentWindow();
 const ui = require('./ui');
 
 class App {
@@ -39,6 +41,7 @@ class App {
     markdownView.addEventListener('dragleave', this.handleOnMarkdownDragLeave);
     markdownView.addEventListener('drop', this.handleOnMarkdownDrop);
     markdownView.addEventListener('keyup', this.handleMarkdownChange);
+    markdownView.addEventListener('contextmenu', this.handleContextMenu);
     openFileBtn.addEventListener('click', this.getFileFromUser);
     newFileBtn.addEventListener('click', this.launchNewWindow);
     saveFileBtn.addEventListener('click', this.handleSaveMarkdown);
@@ -47,8 +50,6 @@ class App {
   };
 
   initIpcRendererListeners() {
-    const currentWindow = remote.getCurrentWindow();
-
     this.ipcRenderer.on('file-opened', (evt, file, content) => {
       if (currentWindow.isDocumentEdited()) {
         const result = remote.dialog.showMessageBox(currentWindow, {
@@ -117,7 +118,6 @@ class App {
 
   handleOnMarkdownDrop = evt => {
     const file = this.getDroppedFile(evt);
-    const currentWindow = remote.getCurrentWindow();
     debugger;
     const { markdownView } = this.ui.selectors;
 
@@ -130,8 +130,21 @@ class App {
     markdownView.classList.remove('drag-error');
   };
 
+  handleContextMenu = evt => {
+    evt.preventDefault();
+    const markdownContextMenu = Menu.buildFromTemplate([
+      { label: 'Open File', click() { mainProcess.getFileFromUser(currentWindow) } },
+      { type: 'separator' },
+      { label: 'Cut', role: 'cut' },
+      { label: 'Copy', role: 'copy' },
+      { label: 'Paste', role: 'paste' },
+      { label: 'Select All', role: 'selectall' }
+    ]);
+
+    markdownContextMenu.popup();
+  };
+
   handleSaveMarkdown = () => {
-    const currentWindow = remote.getCurrentWindow();
     const markdown = this.ui.markdown;
     const file = this.filePath;
     mainProcess.saveMarkdown(currentWindow, file, markdown);
@@ -142,7 +155,6 @@ class App {
   };
 
   handleSaveHtml = () => {
-    const currentWindow = remote.getCurrentWindow();
     const html = this.ui.html;
     mainProcess.saveHtml(currentWindow, html);
   };
@@ -174,7 +186,6 @@ class App {
   }
 
   getFileFromUser() {
-    const currentWindow = remote.getCurrentWindow();
     mainProcess.getFileFromUser(currentWindow);
   }
 
