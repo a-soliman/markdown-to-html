@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const applicationMenu = require('./application-menu');
-
+app.setName('Fire Sale');
 const windows = new Set();
 const openFiles = new Map();
 

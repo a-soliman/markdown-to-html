@@ -40,6 +40,7 @@ const template = [
   },
   {
     label: 'Window',
+    role: 'window',
     submenu: [
       {
         label: 'Minimize',
@@ -50,13 +51,18 @@ const template = [
         label: 'Close',
         accelerator: 'CommandOrControl+W',
         role: 'close'
+      },
+      { type: 'separator' },
+      {
+        label: 'Bring All to Front',
+        role: 'front'
       }
     ]
   }
 ];
 
 if ( process.platform === 'darwin' ) {
-  const name = 'Fire Sale';
+  const name = app.getName();
 
   template.unshift({
     label: name,
