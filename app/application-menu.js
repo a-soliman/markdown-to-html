@@ -58,6 +58,22 @@ const template = [
         role: 'front'
       }
     ]
+  },
+  {
+    label: 'Help',
+    role: 'help',
+    submenu: [
+      {
+        label: 'Visit Website',
+        click() { /* To be implemented */ }
+      },
+      {
+        label: 'Toggle Developer Tools',
+        click(item, focusedWindow) {
+          if ( focusedWindow ) focusedWindow.webContents.toggleDevTools();
+        }
+      }
+    ]
   }
 ];
 
