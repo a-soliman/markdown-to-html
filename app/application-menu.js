@@ -8,18 +8,18 @@ const template = [
       {
         label: 'New File',
         accelerator: 'CommandOrControl+N',
-        click() { mainProcess.createWindow() }
+        click() { mainProcess.createWindow(); }
       },
       {
         label: 'Open File',
         accelerator: 'CommandOrControl+O',
         click(item, focusedWindow) {
-          if ( focusedWindow ) return mainProcess.getFileFromUser(focusedWindow);;
+          if ( focusedWindow ) return mainProcess.getFileFromUser(focusedWindow);
 
           const newWindow = mainProcess.createWindow();
           newWindow.on('show', () => {
             mainProcess.getFileFromUser(newWindow);
-          })
+          });
         }
       },
       {
@@ -30,7 +30,7 @@ const template = [
             return dialog.showErrorBox(
               'Can not Save or Export',
               'There is currently no active document to save or export.'
-            )
+            );
           }
           focusedWindow.webContents.send('save-markdown');
         }
@@ -43,7 +43,7 @@ const template = [
             return dialog.showErrorBox(
               'Can not Save or Export',
               'There is currently no active document to save or export.'
-            )
+            );
           }
           focusedWindow.webContents.send('save-html');
         }
