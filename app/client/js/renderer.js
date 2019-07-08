@@ -64,12 +64,7 @@ class App {
 
         if (result === 1) return;
       }
-      this.filePath = file;
-      this.originalContent = content;
-
-      this.ui.markdown = content;
-      this.renderHtml();
-      this.updateUserInterface();
+      this.handleOpenFile(file, content);
     });
 
     this.ipcRenderer.on('file-changed', (evt, file, content) => {
@@ -142,6 +137,14 @@ class App {
     ]);
 
     markdownContextMenu.popup();
+  };
+  handleOpenFile = (file, content) => {
+    this.filePath = file;
+    this.originalContent = content;
+
+    this.ui.markdown = content;
+    this.renderHtml();
+    this.updateUserInterface();
   };
 
   handleSaveMarkdown = () => {
