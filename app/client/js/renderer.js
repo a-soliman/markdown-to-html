@@ -138,12 +138,17 @@ class App {
 
     markdownContextMenu.popup();
   };
+
   handleOpenFile = (file, content) => {
     this.filePath = file;
     this.originalContent = content;
 
     this.ui.markdown = content;
     this.renderHtml();
+
+    this.ui.showFileBtn.disabled = false;
+    this.ui.selectors.openInDefaultBtn.disabled = false;
+
     this.updateUserInterface();
   };
 
