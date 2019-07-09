@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
-const applicationMenu = require('./application-menu');
+const createApplicationMenu = require('./application-menu');
 app.setName('Fire Sale');
 const windows = new Set();
 const openFiles = new Map();
@@ -33,6 +33,8 @@ let createWindow = (exports.createWindow = () => {
     newWindow.webContents.openDevTools();
   });
 
+  newWindow.on('focus', createApplicationMenu);
+
   newWindow.on('close', evt => {
     // TODO:: isDocumentEdited() is a mac only method, find an alt for win and linux.
     if (newWindow.isDocumentEdited()) {
@@ -53,6 +55,7 @@ let createWindow = (exports.createWindow = () => {
 
   newWindow.on('closed', () => {
     windows.delete(newWindow);
+    createApplicationMenu();
     stopWatchingFile(newWindow);
     newWindow = null;
   });
@@ -62,7 +65,7 @@ let createWindow = (exports.createWindow = () => {
 });
 
 app.on('ready', () => {
-  Menu.setApplicationMenu(applicationMenu);
+  createApplicationMenu();
   createWindow();
 });
 
@@ -106,6 +109,7 @@ const openFile = (exports.openFile = (targetWindow, file) => {
   app.addRecentDocument(file);
   targetWindow.setRepresentedFilename(file);
   targetWindow.webContents.send('file-opened', file, content);
+  createApplicationMenu();
 });
 
 const startWatchingFile = (targetWindow, file) => {
