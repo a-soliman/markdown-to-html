@@ -134,6 +134,8 @@ class App {
     evt.preventDefault();
     const markdownContextMenu = Menu.buildFromTemplate([
       { label: 'Open File', click() { mainProcess.getFileFromUser(currentWindow) } },
+      { label: 'Show File in Folder', click: this.showFile },
+      { label: 'Open in Default Editor', click: this.openInDefaultApplication },
       { type: 'separator' },
       { label: 'Cut', role: 'cut' },
       { label: 'Copy', role: 'copy' },
