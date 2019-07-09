@@ -47,6 +47,32 @@ const template = [
           }
           focusedWindow.webContents.send('save-html');
         }
+      },
+      { type: 'separator' },
+      {
+        label: 'Show File',
+        accelerator: 'Shift+CommandOrControl+O',
+        click(item, focusedWindow) {
+          if ( !focusedWindow ) {
+            return dialog.showErrorBox(
+              'Can not Show Files\'s Location',
+              'There is currently no active window to show.'
+            );
+          }
+          focusedWindow.webContents.send('show-file');
+        }
+      },
+      {
+        label: 'Open in Default Editor',
+        click(item, focusedWindow) {
+          if ( !focusedWindow ) {
+            return dialog.showErrorBox(
+              'Can not Show Files\'s Location',
+              'There is currently no active window to show.'
+            );
+          }
+          focusedWindow.webContents.send('open-in-default');
+        }
       }
     ]
   },
