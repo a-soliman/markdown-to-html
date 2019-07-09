@@ -1,4 +1,4 @@
-const { remote, ipcRenderer } = require('electron');
+const { remote, ipcRenderer, shell } = require('electron');
 const path = require('path');
 const marked = require('marked');
 const mainProcess = remote.require('./main');
@@ -29,7 +29,9 @@ class App {
       newFileBtn,
       saveFileBtn,
       saveHTMLBtn,
-      revertBtn
+      revertBtn,
+      showFileBtn,
+      openInDefaultBtn
     } = this.ui.selectors;
 
     document.addEventListener('dragstart', evt => evt.preventDefault());
@@ -47,6 +49,8 @@ class App {
     saveFileBtn.addEventListener('click', this.handleSaveMarkdown);
     saveHTMLBtn.addEventListener('click', this.handleSaveHtml);
     revertBtn.addEventListener('click', this.handleRevert);
+    showFileBtn.addEventListener('click', this.showFile);
+    openInDefaultBtn.addEventListener('click', this.openInDefaultApplication);
   };
 
   initIpcRendererListeners() {
@@ -139,6 +143,13 @@ class App {
     markdownContextMenu.popup();
   };
 
+  showFile = () => {
+    if(!this.filePath) return alert('This file has not been saved to the file system.');
+    shell.showItemInFolder(this.filePath);
+  }
+
+
+
   handleOpenFile = (file, content) => {
     this.filePath = file;
     this.originalContent = content;
@@ -146,7 +157,7 @@ class App {
     this.ui.markdown = content;
     this.renderHtml();
 
-    this.ui.showFileBtn.disabled = false;
+    this.ui.selectors.showFileBtn.disabled = false;
     this.ui.selectors.openInDefaultBtn.disabled = false;
 
     this.updateUserInterface();
@@ -210,6 +221,14 @@ class App {
     this.ui.selectors.revertBtn.disabled = !this.edited;
     this.ui.selectors.saveFileBtn.disabled = !this.edited;
     this.ui.selectors.saveHTMLBtn.disabled = !this.ui.html.length;
+
+    if (!this.filePath) {
+      this.ui.selectors.openFileBtn.disabled = true;
+      this.ui.selectors.openInDefaultBtn.disabled = true;
+    } else {
+      this.ui.selectors.openFileBtn.disabled = false;
+      this.ui.selectors.openInDefaultBtn.disabled = false;
+    }
   }
 
   setTitle = title => remote.getCurrentWindow().setTitle(title);
