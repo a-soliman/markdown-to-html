@@ -148,7 +148,10 @@ class App {
     shell.showItemInFolder(this.filePath);
   }
 
-
+  openInDefaultApplication = () => {
+    if(!this.filePath) return alert('This file has not been saved to the file system.');
+    shell.openItem(this.filePath);
+  };
 
   handleOpenFile = (file, content) => {
     this.filePath = file;
