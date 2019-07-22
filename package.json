@@ -5,6 +5,7 @@
   "main": "./app/main.js",
   "scripts": {
     "start": "electron .",
+    "build": "electron-packager .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
