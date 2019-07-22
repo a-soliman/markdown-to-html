@@ -30,7 +30,6 @@ let createWindow = (exports.createWindow = () => {
 
   newWindow.once('ready-to-show', () => {
     newWindow.show();
-    newWindow.webContents.openDevTools();
   });
 
   newWindow.on('focus', createApplicationMenu);
