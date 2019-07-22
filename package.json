@@ -2,10 +2,14 @@
   "name": "fire-sale",
   "version": "1.0.0",
   "description": "Markdown editer/viewer.",
+  "productName": "Fire Sale",
   "main": "./app/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . --out=build",
+    "build": "npm run build-mac && npm run build-win && npm run build-linux",
+    "build-mac": "electron-packager . --platform=darwin --out=build --asar --overwrite",
+    "build-win": "electron-packager . --platform=win32 --out=build --asar --overwrite",
+    "build-linux": "electron-packager . --platform=linux --out=build --asar --overwrite",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
