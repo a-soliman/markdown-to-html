@@ -1,6 +1,8 @@
-const { app, BrowserWindow, Menu, dialog } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+
+require('./crash-reporter');
 
 const createApplicationMenu = require('./application-menu');
 app.setName('Fire Sale');

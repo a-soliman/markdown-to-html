@@ -6,6 +6,8 @@ const { Menu } = remote;
 const currentWindow = remote.getCurrentWindow();
 const ui = require('./ui');
 
+require('../../crash-reporter');
+
 class App {
   constructor(ui, ipcRenderer) {
     this.ui = ui;
