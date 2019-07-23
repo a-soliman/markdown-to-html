@@ -3,7 +3,7 @@ const host = 'http://localhost:3000';
 const config = {
   productName: 'Fire Sale',
   companyName: 'Electron in Action',
-  submitURL: host + 'crashreports',
+  submitURL: host + '/crashreports',
   uploadToServer: true
 };
 
