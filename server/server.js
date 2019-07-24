@@ -18,6 +18,38 @@ const upload = multer({
   dest: crashesPath
 }).single('upload_file_minidump');
 
+const latestRelease = '1.2.0';
+
+app.get('/releases/:platform', (req, res) => {
+  const { platform } = req.params;
+  const { currentVersion } = req.query;
+
+  if ( currentVersion === latestRelease ) {
+    res.status(204);
+    return res.end();
+  }
+
+  if (platform === 'darwin') {
+    return res.json({
+      url
+    });
+  }
+
+  if (platform === 'win32') {
+    return res.json({
+      url
+    });
+  }
+
+  if (platform === 'linux') {
+    return res.json({
+      url
+    });
+  }
+
+  res.status(404).end();
+});
+
 app.post('/crashreports', upload, (req, res) => {
   const body = {
     ...req.body,
